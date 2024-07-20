@@ -19,9 +19,7 @@ def create_user(db: Session, user: UserCreate):
         password_hash=hashed_password,
         username=user.username,
         first_name=user.first_name,
-        last_name=user.last_name,
-        career_objective=user.career_objective,
-        work_preference=user.work_preference
+        last_name=user.last_name
     )
     db.add(db_user)
     db.commit()

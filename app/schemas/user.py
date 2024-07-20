@@ -3,14 +3,16 @@ from typing import Optional
 from datetime import datetime
 
 class UserBase(BaseModel):
+    username: str = Field(..., min_length=3, max_length=50)
     email: EmailStr
-    name: str
+    first_name: Optional[str] = Field(None, max_length=50)
+    last_name: Optional[str] = Field(None, max_length=50)    
 
 class UserCreate(UserBase):
-    password: str
+    password: str = Field(..., min_length=8)
 
 class User(UserBase):
-    id: int
+    user_id: int
 
     class Config:
         orm_mode = True
@@ -20,8 +22,6 @@ class UserUpdate(BaseModel):
     email: Optional[EmailStr] = None
     first_name: Optional[str] = Field(None, max_length=50)
     last_name: Optional[str] = Field(None, max_length=50)
-    career_objective: Optional[str] = None
-    work_preference: Optional[str] = Field(None, max_length=20)
 
 class UserInDBBase(UserBase):
     user_id: int
