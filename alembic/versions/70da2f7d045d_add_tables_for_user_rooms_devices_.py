@@ -9,6 +9,7 @@ from typing import Sequence, Union
 
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy.dialects import mysql
 
 
 # revision identifiers, used by Alembic.
@@ -24,7 +25,7 @@ def upgrade() -> None:
     op.create_table('rooms',
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('name', sa.String(length=255), nullable=True),
-        sa.Column('image', sa.Text(), nullable=True),
+        sa.Column('image', mysql.LONGTEXT(), nullable=True),
         sa.Column('user_id', sa.Integer(), nullable=False),
         sa.ForeignKeyConstraint(['user_id'], ['users.user_id'], ),
         sa.PrimaryKeyConstraint('id')
@@ -36,7 +37,7 @@ def upgrade() -> None:
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('name', sa.String(length=255), nullable=True),
         sa.Column('type', sa.String(length=50), nullable=True),
-        sa.Column('image', sa.Text(), nullable=True),  # New column for base64 encoded image
+        sa.Column('image', mysql.LONGTEXT(), nullable=True),  # New column for base64 encoded image
         sa.Column('user_id', sa.Integer(), nullable=False),
         sa.Column('room_id', sa.Integer(), nullable=True),
         sa.ForeignKeyConstraint(['user_id'], ['users.user_id'], ),

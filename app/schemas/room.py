@@ -1,11 +1,15 @@
 from pydantic import BaseModel
 from datetime import datetime
 from typing import List, Optional
-from app.models.device import Device
+from .device import Device
 
 class RoomBase(BaseModel):
     name: str
-    image: Optional[str] = None  # New field for base64 encoded image
+    image: Optional[str] = None
+    devices: Optional[List[int]] = None  
+    
+    class Config:
+        orm_mode = True
 
 class RoomCreate(RoomBase):
     pass
