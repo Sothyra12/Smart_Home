@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import List, Optional
+from datetime import datetime
 
 class DeviceBase(BaseModel):
     name: str
@@ -20,3 +21,19 @@ class Device(DeviceBase):
     class Config:
         orm_mode = True
         arbitrary_types_allowed = True
+
+class DeviceConsumptionBase(BaseModel):
+    power_consumption: float
+    duration: float
+    total_consumption: float
+
+class DeviceConsumptionCreate(DeviceConsumptionBase):
+    device_id: int
+
+class DeviceConsumption(DeviceConsumptionBase):
+    id: int
+    device_id: int
+    timestamp: datetime
+
+    class Config:
+        orm_mode = True        
