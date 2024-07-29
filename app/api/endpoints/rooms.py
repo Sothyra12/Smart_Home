@@ -31,3 +31,18 @@ def read_room(room_id: int, db: Session = Depends(get_db)):
     if db_room is None:
         raise HTTPException(status_code=404, detail="Room not found")
     return db_room
+
+@router.get("/{room_id}/devices", response_model=List[schemas.Device])
+def read_room_devices(
+    room_id: int, 
+    db: Session = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user)
+):
+    db_room = crud.get_room(db, room_id=room_id)
+
+    if db_room is None:
+        raise HTTPException(status_code=404, detail="Room not found")
+    if int(db_room.user_id) != int(current_user.user_id):
+        raise HTTPException(status_code=403, detail="Not authorized to access this room")
+    devices = crud.get_room_devices(db, room_id=room_id)
+    return devices

@@ -23,3 +23,8 @@ def create_room(db: Session, room: schemas.RoomCreate, user_id: int):
         db.commit()
 
     return db_room
+
+
+def get_room_devices(db: Session, room_id: int):
+    print(room_id)
+    return db.query(Device).filter(Device.room_id == room_id).all()
