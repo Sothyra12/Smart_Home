@@ -27,9 +27,10 @@ def login_for_access_token(login_request: LoginRequest, db: Session = Depends(ge
             detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token = create_access_token(subject=user.email)
+    access_token = access_token = create_access_token(user_id=user.user_id, email=user.email)
     user_data = UserMinimal(
         username=user.username,
         email=user.email,
+        user_id=user.user_id,
     )
     return {"user": user_data, "access_token": access_token, "token_type": "bearer"}

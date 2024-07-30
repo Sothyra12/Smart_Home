@@ -43,6 +43,7 @@ class UserCreateWithPassword(UserCreate):
 class UserMinimal(BaseModel):
     username: str
     email: str
+    user_id: int
 
 class Token(BaseModel):
     access_token: str
