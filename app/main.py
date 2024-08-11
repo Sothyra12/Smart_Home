@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # routes
 from app.api.endpoints import auth
 from app.api.endpoints import rooms_router, devices_router
+import uvicorn
 
 user_model.Base.metadata.create_all(bind=engine)
 
@@ -28,3 +29,7 @@ app.include_router(devices_router, prefix="/api/v1/devices", tags=["devices"])
 @app.get("/")
 def read_root():
     return {"message": "Welcome to SynHome API"}
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="10.0.0.202", port=8000)

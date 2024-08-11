@@ -56,5 +56,7 @@
 
 1. Run the FastAPI application:
     ```bash
-    uvicorn main:app --reload
+    uvicorn app.main:app --host [10.0.0.202] --port 8000 --reload
+
     ```
+    change the ip address to the ip address of the machine running the backend
