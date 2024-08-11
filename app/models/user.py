@@ -52,6 +52,8 @@ class Device(Base):
     last_updated = Column(DateTime, nullable=True)
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+    brand = Column(String(50), nullable=True)
+    model_number = Column(String(50), nullable=True)
 
     user = relationship("User", back_populates="devices")
     room = relationship("Room", back_populates="devices")
@@ -68,6 +70,7 @@ class DeviceConsumption(Base):
     start_time = Column(DateTime, nullable=False)
     end_time = Column(DateTime, nullable=True)
     consumption = Column(Float, nullable=False)
+    #timestamp = Column(DateTime, nullable=True)
 
     device = relationship("Device", back_populates="consumptions")
 

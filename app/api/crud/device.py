@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
-from app.models.device import Device
+from app.models.device import Device, DeviceConsumption
 from app.models.room import Room
 from app import schemas
+from datetime import datetime
 
 def get_device(db: Session, device_id: int):
     return db.query(Device).filter(Device.id == device_id).first()
@@ -24,3 +25,20 @@ def create_device(db: Session, device: schemas.DeviceCreate):
         db.commit()
 
     return db_device
+
+
+def add_device_consumption(db: Session, device_id: int, start_time: datetime, end_time: datetime, power_consumption: float, brand: str, model_number: str):
+    db_consumption = DeviceConsumption(
+        device_id=device_id,
+        start_time=start_time,
+        end_time=end_time,
+        consumption=power_consumption,
+        brand=brand,
+        model_number=model_number
+    )
+    
+    db.add(db_consumption)
+    db.commit()
+    db.refresh(db_consumption)
+    
+    return db_consumption
