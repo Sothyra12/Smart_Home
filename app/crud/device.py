@@ -14,7 +14,6 @@ def get_devices(db: Session, skip: int = 0, limit: int = 100, user_id: int = 0):
 
 def create_device(db: Session, device: DeviceCreate, user_id: int):
     db_device = Device(name=device.name, image=device.image,is_on=device.is_on, user_id=user_id, room_id=device.room_id, type=device.type, power_rating=device.power_rating, brand=device.brand, model_number=device.model_number)
-    print(device)
     db.add(db_device)
     db.commit()
     db.refresh(db_device)

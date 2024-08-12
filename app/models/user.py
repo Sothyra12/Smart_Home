@@ -54,6 +54,7 @@ class Device(Base):
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
     brand = Column(String(50), nullable=True)
     model_number = Column(String(50), nullable=True)
+    energy_limit = Column(Float, nullable=True)
 
     user = relationship("User", back_populates="devices")
     room = relationship("Room", back_populates="devices")
@@ -70,7 +71,7 @@ class DeviceConsumption(Base):
     start_time = Column(DateTime, nullable=False)
     end_time = Column(DateTime, nullable=True)
     consumption = Column(Float, nullable=False)
-    #timestamp = Column(DateTime, nullable=True)
+    timestamp = Column(DateTime, nullable=True)
 
     device = relationship("Device", back_populates="consumptions")
 
@@ -83,6 +84,17 @@ class UserProfile(Base):
     birth_date = Column(DateTime)
 
     user = relationship("User", back_populates="profile")
+
+class UserSettings(Base):
+    __tablename__ = "user_settings"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
+    setting_key = Column(String(50), nullable=False)
+    setting_value = Column(String(50), nullable=False)
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+
+    user = relationship("User", back_populates="settings")   
 class User(Base):
     __tablename__ = "users"
 
@@ -95,9 +107,11 @@ class User(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     deleted_at = Column(DateTime(timezone=True))
+    user_type = Column(String(50))
 
         
     rooms = relationship("Room", back_populates="user")
     devices = relationship("Device", back_populates="user")
     profile = relationship("UserProfile", back_populates="user", uselist=False)
     scenes = relationship("Scene", back_populates="user")
+    settings = relationship("UserSettings", back_populates="user")
