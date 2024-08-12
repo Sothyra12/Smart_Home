@@ -12,6 +12,7 @@ class DeviceBase(BaseModel):
     user_id: Optional[int] = None
     brand: Optional[str] = None
     model_number: Optional[str] = None
+    energy_limit: Optional[float] = 0.0
 
 class DeviceCreate(DeviceBase):
     pass
@@ -40,3 +41,6 @@ class DeviceConsumption(DeviceConsumptionBase):
     class Config:
         orm_mode = True
         arbitrary_types_allowed = True     
+
+class DeviceUpdate(BaseModel):
+    energy_limit: float

@@ -5,7 +5,7 @@ from app.models import user as user_model
 from fastapi.middleware.cors import CORSMiddleware
 # routes
 from app.api.endpoints import auth
-from app.api.endpoints import rooms_router, devices_router
+from app.api.endpoints import rooms_router, devices_router, stats_router
 import uvicorn
 
 user_model.Base.metadata.create_all(bind=engine)
@@ -25,6 +25,7 @@ app.include_router(user.router, prefix="/api/v1/users", tags=["users"])
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
 app.include_router(rooms_router, prefix="/api/v1/rooms", tags=["rooms"])
 app.include_router(devices_router, prefix="/api/v1/devices", tags=["devices"])
+app.include_router(stats_router, prefix="/api/v1/stats", tags=["stats"])
 
 @app.get("/")
 def read_root():

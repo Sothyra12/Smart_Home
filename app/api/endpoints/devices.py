@@ -5,7 +5,7 @@ import csv
 from datetime import datetime
 
 from app.crud import device as crud
-from app.schemas.device import Device as DeviceSchema, DeviceCreate as DeviceCreateSchema, DeviceConsumption as DeviceConsumptionSchema, DeviceConsumptionCreate
+from app.schemas.device import Device as DeviceSchema, DeviceCreate as DeviceCreateSchema, DeviceConsumption as DeviceConsumptionSchema, DeviceConsumptionCreate, DeviceUpdate
 from app.db.session import get_db
 from app.core.utils import get_current_user
 from app.core.security import TokenData
@@ -158,3 +158,21 @@ def get_brands_by_device_type(device_type: str):
         raise HTTPException(status_code=400, detail=str(e))
     except FileNotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e))
+    
+
+@router.put("/devices/{device_id}/limit/")
+def update_device_limit(
+    device_id: int, 
+    device_update: DeviceUpdate, 
+    db: Session = Depends(get_db), 
+    current_user: TokenData = Depends(get_current_user)
+):
+    user_id = current_user.user_id
+    device = db.query(Device).filter(Device.id == device_id, Device.user_id == user_id).first()
+    if not device:
+        raise HTTPException(status_code=404, detail="Device not found or not owned by user")
+    
+    device.energy_limit = device_update.energy_limit
+    db.commit()
+    db.refresh(device)
+    return device
