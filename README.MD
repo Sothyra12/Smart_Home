@@ -1,4 +1,16 @@
 ## Running Locally
+
+### Requirements
+1. Python 3.11
+    Make sure Python is running on your machine.
+1. Pip
+1. MySQL server running locally
+    Install MySQL server locally or use Docker to have a MySQL server
+1. (Optional) MySQL Workbench to manage your database
+
+
+### Steps:
+
 1. Clone the repo:
     ```bash
     git clone <repository-url>
@@ -26,7 +38,7 @@
 
 1. Update or create the `.env` file based on the `.env.local` file. Your `.env` file should contain the following:
     ```ini
-    DATABASE_URL=mysql+pymysql://default:secret@localhost:3306/apptrakr
+    DATABASE_URL=mysql+pymysql://default:secret@localhost:3306/sampledb
     SECRET_KEY=randomstuffhere
     ALGORITHM=HS256
     ACCESS_TOKEN_EXPIRE_MINUTES=30
@@ -37,12 +49,14 @@
 
 1. Update the database settings in the `.env` file as necessary.
 
-1. Update `alembic.ini`:
+1. Create a new `alembic.ini` file by copying the `alembic.ini.example` file:
     ```ini
-    sqlalchemy.url = mysql+pymysql://default:secret@localhost:3306/apptrakr
+    sqlalchemy.url = mysql+pymysql://default:secret@localhost:3306/sampledb
     ```
 
 1. Run the FastAPI application:
     ```bash
-    uvicorn main:app --reload
+    uvicorn app.main:app --host [10.0.0.202] --port 8000 --reload
+
     ```
+    change the ip address to the ip address of the machine running the backend

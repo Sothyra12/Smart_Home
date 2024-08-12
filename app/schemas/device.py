@@ -10,6 +10,9 @@ class DeviceBase(BaseModel):
     power_rating: Optional[float] = 0.0
     room_id: Optional[int] = None
     user_id: Optional[int] = None
+    brand: Optional[str] = None
+    model_number: Optional[str] = None
+    energy_limit: Optional[float] = 0.0
 
 class DeviceCreate(DeviceBase):
     pass
@@ -23,17 +26,21 @@ class Device(DeviceBase):
         arbitrary_types_allowed = True
 
 class DeviceConsumptionBase(BaseModel):
-    power_consumption: float
-    duration: float
-    total_consumption: float
+    device_id: int
+    start_time: datetime
+    end_time: datetime
+    consumption: float
 
 class DeviceConsumptionCreate(DeviceConsumptionBase):
     device_id: int
 
 class DeviceConsumption(DeviceConsumptionBase):
     id: int
-    device_id: int
-    timestamp: datetime
+    # timestamp: datetime
 
     class Config:
-        orm_mode = True        
+        orm_mode = True
+        arbitrary_types_allowed = True     
+
+class DeviceUpdate(BaseModel):
+    energy_limit: float

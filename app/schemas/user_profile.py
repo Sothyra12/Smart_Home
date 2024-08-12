@@ -3,8 +3,8 @@ from datetime import datetime
 from typing import List, Optional
 
 class UserProfileBase(BaseModel):
-    full_name: str
-    birth_date: datetime
+    full_name: Optional[str] = None
+    birth_date: Optional[datetime] = None
 
 class UserProfileCreate(UserProfileBase):
     pass
