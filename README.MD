@@ -60,3 +60,22 @@
 
     ```
     change the ip address to the ip address of the machine running the backend
+
+
+### Running the Tests
+1. Activate the virtual environment:
+    - **Windows (run in bash)**
+    ```bash
+    source venv/Scripts/activate   
+    ``` 
+    - **Mac and Linux   
+    **
+    ```bash
+    source venv/bin/activate
+    ```
+        1. Run the tests:
+        ```bash 
+        pytest app/tests/test_main.py
+    ``  1. Export py
+        ```
+        
