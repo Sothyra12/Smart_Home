@@ -1,11 +1,9 @@
-from fastapi import FastAPI
-from app.api.endpoints import user
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from app.api.endpoints import user, auth, rooms_router, devices_router
 from app.db.session import engine
 from app.models import user as user_model
-from fastapi.middleware.cors import CORSMiddleware
-# routes
-from app.api.endpoints import auth
-from app.api.endpoints import rooms_router, devices_router
+from app.models.login import LoginRequest
 
 user_model.Base.metadata.create_all(bind=engine)
 
@@ -28,3 +26,10 @@ app.include_router(devices_router, prefix="/api/v1/devices", tags=["devices"])
 @app.get("/")
 def read_root():
     return {"message": "Welcome to SynHome API"}
+
+# New endpoints
+@app.post("/login")
+async def login(request: LoginRequest):
+    if request.username == "admin" and request.password == "secret":
+        return {"message": "Login successful"}
+    raise HTTPException(status_code=401, detail="Invalid credentials")
