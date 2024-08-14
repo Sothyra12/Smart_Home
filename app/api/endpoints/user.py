@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.crud import user as user_crud
+from app.crud import device as device_crud
 from app.schemas.user import User, UserCreate, UserResponse, UserUpdate, CombinedUserProfileResponse, CombinedUserProfileUpdate, UserSettings, UserSettingsCreate
+from app.schemas.device import DeviceWithConsumption, ChatRequest, ChatResponse
 from app.core.security import create_access_token, verify_password
 from app.db.session import get_db
 from app.core.utils import get_current_user
@@ -9,7 +11,17 @@ from app.models import user as user_model
 from app.core.security import TokenData
 from typing import List
 
+from dotenv import load_dotenv
+import getpass
+import os
 
+load_dotenv()
+
+if "GOOGLE_API_KEY" not in os.environ:
+    os.environ["GOOGLE_API_KEY"] = getpass.getpass("Provide your Google API Key")
+
+GEMINI_API_KEY = os.getenv("GOOGLE_API_KEY")
+print(GEMINI_API_KEY)
 router = APIRouter()
 
 ALLOWED_USER_TYPES = ['Tech Enthusiast', 'Remote Manager', 'Eco-Conscious User', 'Family Oriented']
@@ -145,3 +157,26 @@ def get_all_user_settings(
         raise HTTPException(status_code=404, detail="No settings found for this user")
     
     return settings
+
+
+@router.get("/devices/consumptions", response_model=List[DeviceWithConsumption])
+def read_user_devices(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    return device_crud.get_user_devices_and_consumption(db, user_id=current_user.user_id)
+
+
+@router.post("/chat/devices", response_model=ChatResponse)
+def chat_with_ai(
+    user_query: ChatRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # Generate the response using RAG
+    response = device_crud.generate_response_with_rag(db, user_id=current_user.user_id, user_query=user_query.query)
+    
+    if not response:
+        raise HTTPException(status_code=500, detail="Error generating AI response.")
+    
+    return ChatResponse(response=response)

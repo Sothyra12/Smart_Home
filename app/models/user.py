@@ -71,7 +71,7 @@ class DeviceConsumption(Base):
     start_time = Column(DateTime, nullable=False)
     end_time = Column(DateTime, nullable=True)
     consumption = Column(Float, nullable=False)
-    timestamp = Column(DateTime, nullable=True)
+    timestamp = Column(DateTime, nullable=False, default=func.now())
 
     device = relationship("Device", back_populates="consumptions")
 

@@ -44,3 +44,20 @@ class DeviceConsumption(DeviceConsumptionBase):
 
 class DeviceUpdate(BaseModel):
     energy_limit: float
+
+
+# New Schema
+class DeviceWithConsumption(DeviceBase):
+    latest_consumption: Optional[float] = None
+    timestamp: Optional[datetime] = None
+
+    class Config:
+        orm_mode = True
+        arbitrary_types_allowed = True
+
+
+class ChatRequest(BaseModel):
+    query: str
+
+class ChatResponse(BaseModel):
+    response: str
